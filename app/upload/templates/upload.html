@@ -1,0 +1,55 @@
+{% block content %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <body class="d-lg-flex justify-content-lg-center align-items-lg-center">
+    <div class="container d-lg-flex align-items-center justify-content-lg-center align-items-lg-center">
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Этот сайт полностью развернут из docker образа</h5></div>
+            <div class="card-body"><p class="card-text">Docker образ состоит из 3 вспомогательных контейнеров:<br></p>
+                <ul>
+                    <li>Контейнер самого Django проекта(обычный чистый проект) + Gunicorn</li>
+                    <li>Контейнер Postgres</li>
+                    <li>Контейнер Nginx - для связывания статики и проксирования gunicorn с пробросом на внешний nginx
+                    </li>
+                </ul>
+                <p>Docker образ имеет 2 режима запуска:</p>
+                <ul>
+                    <li>Dev</li>
+                    <li>Production - запущен в данный момент</li>
+                </ul>
+                <p>При сборке образа использовался конфигурационный файл.<br>Конфигурационный файл влияет на такие
+                    параметры как режим дебага, база данных и папки статики в settings.py</p>
+                <p>Данный текст получен из конфигурационной среды - {{ var }}</p>
+                <div class="card">
+                    <div class="card-header"><h5 class="mb-0">Проверка режима загрузка картинки</h5></div>
+                    <div class="card-body">
+                        <form action="{% url "upload" %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="image_file">
+                            <input type="submit" value="submit"/>
+                        </form>
+                        {% if image_url %}
+                            <p>File uploaded at: <a href="{{ image_url }}">{{ image_url }}</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card" style="  margin-top: 15px;">
+                    <div class="card-header"><h5 class="mb-0">Источники</h5></div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Docker образ создан с помощью урока -&nbsp;<a
+                                    href="https://webdevblog.ru/kak-ispolzovat-django-postgresql-i-docker/"
+                                    target="_blank">https://webdevblog.ru/kak-ispolzovat-django-postgresql-i-docker/</a>
+                            </li>
+                            <li>GitHub образа -&nbsp;<a href="https://github.com/shok96/DjangoDockerTest.git"
+                                                        target="_blank">https://github.com/shok96/DjangoDockerTest.git</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+
+{% endblock %}
